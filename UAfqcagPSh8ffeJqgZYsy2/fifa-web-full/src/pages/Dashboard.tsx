@@ -7,18 +7,16 @@ export default function Dashboard() {
   const [stats, setStats] = useState({
     total: 0,
     issues: 0,
-    today: 0,
-    completed: 0
+    thisWeek: 0
   });
 
   useEffect(() => {
-    const today = new Date().toDateString();
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     
     setStats({
       total: reports.length,
-      issues: reports.filter(r => r.status === 'issues').length,
-      today: reports.filter(r => new Date(r.createdAt).toDateString() === today).length,
-      completed: reports.filter(r => r.status === 'completed').length
+      issues: reports.filter(r => r.functionalAreas && r.functionalAreas.some(area => area.status === 'ISSUE')).length,
+      thisWeek: reports.filter(r => new Date(r.createdAt) > weekAgo).length
     });
   }, [reports]);
 
@@ -30,10 +28,10 @@ export default function Dashboard() {
       <div className="header-section">
         <div>
           <p className="greeting">Welcome</p>
-          <h2 className="page-title">Matchday Report Dashboard</h2>
+          <h2 className="page-title">Matchday Report</h2>
         </div>
         <div className="header-icon">
-          <span className="material-icons">sports_soccer</span>
+          <span className="material-icons">stadium</span>
         </div>
       </div>
 
@@ -51,13 +49,8 @@ export default function Dashboard() {
         </div>
         <div className="stat-card">
           <span className="material-icons">today</span>
-          <span className="stat-number">{stats.today}</span>
-          <span className="stat-label">Today</span>
-        </div>
-        <div className="stat-card">
-          <span className="material-icons">check_circle</span>
-          <span className="stat-number">{stats.completed}</span>
-          <span className="stat-label">Completed</span>
+          <span className="stat-number">{stats.thisWeek}</span>
+          <span className="stat-label">This Week</span>
         </div>
       </div>
 
@@ -97,18 +90,30 @@ export default function Dashboard() {
                 className="report-card"
               >
                 <div className="report-header">
-                  <div className="report-title">Match {report.matchNumber}</div>
-                  <div className={`report-status ${report.status}`}>
-                    {report.status === 'completed' ? 'Completed' : 'Has Issues'}
+                  <div className="report-title">Match #{report.matchInfo.matchNumber}</div>
+                  <div className={`report-status ${report.functionalAreas && report.functionalAreas.some(area => area.status === 'ISSUE') ? 'issues' : 'completed'}`}>
+                    {report.functionalAreas && report.functionalAreas.some(area => area.status === 'ISSUE') ? 'Has Issues' : 'Completed'}
                   </div>
                 </div>
                 <div className="report-info">
-                  <div><strong>Teams:</strong> {report.homeTeam || 'TBD'} vs {report.awayTeam || 'TBD'}</div>
-                  <div><strong>Score:</strong> {report.finalScore}</div>
+                  <div><strong>Teams:</strong> {report.matchInfo.homeTeam || 'TBD'} vs {report.matchInfo.awayTeam || 'TBD'}</div>
+                  <div><strong>Score:</strong> {report.matchInfo.finalScore}</div>
                   <div><strong>Date:</strong> {new Date(report.createdAt).toLocaleDateString()}</div>
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Empty State */}
+      {reports.length === 0 && (
+        <div className="card">
+          <div className="empty-state">
+            <span className="material-icons">description</span>
+            <h3>Get Started</h3>
+            <p>Create your first match report</p>
+            <Link to="/create" className="btn btn-primary">Create Report</Link>
           </div>
         </div>
       )}

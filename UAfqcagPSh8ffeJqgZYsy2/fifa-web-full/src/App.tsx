@@ -1,12 +1,14 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ReportsProvider } from './contexts/ReportsContext';
 import Layout from './components/Layout';
+import { ReportsProvider } from './contexts/ReportsContext';
 import Dashboard from './pages/Dashboard';
 import CreateReport from './pages/CreateReport';
 import Reports from './pages/Reports';
-import Statistics from './pages/Statistics';
 import ReportDetails from './pages/ReportDetails';
+import Statistics from './pages/Statistics';
+import About from './pages/About';
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/reports/:id" element={<ReportDetails />} />
             <Route path="/statistics" element={<Statistics />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </Layout>
       </Router>

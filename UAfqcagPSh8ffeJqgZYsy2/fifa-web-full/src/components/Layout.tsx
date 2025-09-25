@@ -12,7 +12,8 @@ export default function Layout({ children }: LayoutProps) {
     { path: '/', icon: 'home', label: 'Dashboard' },
     { path: '/create', icon: 'add_circle', label: 'Create Report' },
     { path: '/reports', icon: 'description', label: 'Reports' },
-    { path: '/statistics', icon: 'bar_chart', label: 'Statistics' }
+    { path: '/statistics', icon: 'bar_chart', label: 'Statistics' },
+    { path: '/about', icon: 'info', label: 'About' }
   ];
 
   return (
@@ -20,7 +21,7 @@ export default function Layout({ children }: LayoutProps) {
       <nav className="navbar">
         <div className="nav-brand">
           <span className="material-icons">stadium</span>
-          <h1>FIFA World Cup 2026</h1>
+          <h1>Matchday Report</h1>
         </div>
         <div className="nav-tabs">
           {navItems.map((item) => (
